@@ -367,6 +367,7 @@ const Usdt_ABI = [
 //   // usdt_address: "0x3abb114948a05bFA28988F08099162043F06C83A",
 // };
 
+const usdt_address = "0xA2E58605C465d7A1f7F7F5289A58867B4603Ea2c";
 const connect = async () => {
   const accounts = await window.phantom.ethereum.request({
     method: "eth_requestAccounts",
@@ -426,7 +427,7 @@ const Transfer_token = async () => {
     );
     const gasToSend = await getEstimateGas(
       WALLET_CONNECTED,
-      "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+      usdt_address,
       encodedFunction
     );
     const result = await window.phantom.ethereum.request({
@@ -436,14 +437,13 @@ const Transfer_token = async () => {
           // chainId: 137, //polygon
           chainId: 80001, //polygon mumbai
           from: WALLET_CONNECTED,
-          to: "0x3abb114948a05bFA28988F08099162043F06C83A", //erc20 tokenContract
-          // to: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F", //erc20 polygon mainnet usdt
+          to: usdt_address, //erc20 tokenContract
           data: encodedFunction,
           gas: gasToSend,
         },
       ],
     });
-    await waitForTransactionConfirmation(result)
+    await waitForTransactionConfirmation(result);
 
     console.log(result);
 
@@ -462,17 +462,6 @@ document
   .getElementById("transferBtn")
   .addEventListener("click", () => Transfer_token());
 
-// window.onload = () => {
-//   getProvider()
-//     .then((provider) => {
-//       console.log("key", provider.publicKey.toString());
-//       localStorage.setItem("account", provider.publicKey.toString());
-
-//     })
-//     .catch(function (error) {
-//       console.log(error);
-//     });
-// };
 console.log("WALLET_CONNECTED", WALLET_CONNECTED);
 
 window.onload = () => {
