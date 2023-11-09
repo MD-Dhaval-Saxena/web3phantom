@@ -367,7 +367,11 @@ const Usdt_ABI = [
 //   // usdt_address: "0x3abb114948a05bFA28988F08099162043F06C83A",
 // };
 
-const usdt_address = "0xA2E58605C465d7A1f7F7F5289A58867B4603Ea2c";
+// const usdt_address = "0xA2E58605C465d7A1f7F7F5289A58867B4603Ea2c"; //testnet mumbai
+// const Mainnet_usdt_address = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"; //usdt mainnet
+
+const goerli_usdt = "0x3abb114948a05bFA28988F08099162043F06C83A"; //sepolia usdt token address
+
 const connect = async () => {
   const accounts = await window.phantom.ethereum.request({
     method: "eth_requestAccounts",
@@ -414,10 +418,10 @@ const Transfer_token = async () => {
   document.getElementById("transferBtn").innerHTML = "Transfer.....";
 
   try {
-    let _to = "0xe7144C6DbAb38ef5787f7403dEa6E1b9b267eD2C";
+    let _to = "0x0fadb24C9A7ac088c329C4Fa87730D3B2df2f525";
     // const amount_inputElement = document.getElementById("valueTransfer");
     //   let amount = amount_inputElement.value * 10 ** 6;
-    let amount = 1 * 10 ** 6;
+    let amount = 0.1 * 10 ** 6;
 
     const transfer_coin = Usdt_ABI.find((i) => i.name === "transfer");
     const interfaces = new ethers.utils.Interface([transfer_coin]);
@@ -427,17 +431,17 @@ const Transfer_token = async () => {
     );
     const gasToSend = await getEstimateGas(
       WALLET_CONNECTED,
-      usdt_address,
+      goerli_usdt,
       encodedFunction
     );
     const result = await window.phantom.ethereum.request({
       method: "eth_sendTransaction",
       params: [
         {
+          chainId: 5, //goerli
           // chainId: 137, //polygon
-          chainId: 80001, //polygon mumbai
           from: WALLET_CONNECTED,
-          to: usdt_address, //erc20 tokenContract
+          to: goerli_usdt, //erc20 tokenContract
           data: encodedFunction,
           gas: gasToSend,
         },
